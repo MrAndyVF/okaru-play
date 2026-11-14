@@ -1,4 +1,4 @@
-# okaru-play: compila la rama main del checkout (OKARU_PLAY_REPO, por defecto ~/Projects/okaru-play).
+# okaru-play: compila la rama main del checkout (OKARU_PLAY_REPO, por defecto ~/Projects/okaru-project/okaru-play).
 pkgname=okaru-play
 pkgver=1.0.0
 pkgrel=1
@@ -11,7 +11,7 @@ _core=$(pacman -Q okaru-core 2>/dev/null | cut -d' ' -f2)
 depends=("okaru-core${_core:+=$_core}" mpv)
 makedepends=(meson ninja pkgconf okaru-core tomlplusplus nlohmann-json) # nlohmann-json: la piden las cabeceras del núcleo (okaru-core <= 1.2.4 no la declaraba)
 options=('!debug' '!lto')
-source=("okaru-play::git+file://${OKARU_PLAY_REPO:-$HOME/Projects/okaru-play}#branch=main")
+source=("okaru-play::git+file://${OKARU_PLAY_REPO:-$HOME/Projects/okaru-project/okaru-play}#branch=main")
 sha256sums=(SKIP)
 
 pkgver() {
