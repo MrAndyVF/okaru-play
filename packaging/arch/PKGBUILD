@@ -1,0 +1,30 @@
+# okaru-play: compila la rama main del checkout (OKARU_PLAY_REPO, por defecto ~/Projects/okaru-play).
+pkgname=okaru-play
+pkgver=1.0.0
+pkgrel=1
+pkgdesc='OKARU (郁): el reproductor'
+arch=(x86_64)
+url='https://github.com/MrAndyVF/okaru-play'
+license=(MIT)
+# Sin ABI estable: depende de la versión exacta del núcleo con el que se compiló (la instalada al compilar).
+_core=$(pacman -Q okaru-core 2>/dev/null | cut -d' ' -f2)
+depends=("okaru-core${_core:+=$_core}" mpv)
+makedepends=(meson ninja pkgconf okaru-core tomlplusplus nlohmann-json) # nlohmann-json: la piden las cabeceras del núcleo (okaru-core <= 1.2.4 no la declaraba)
+options=('!debug' '!lto')
+source=("okaru-play::git+file://${OKARU_PLAY_REPO:-$HOME/Projects/okaru-play}#branch=main")
+sha256sums=(SKIP)
+
+pkgver() {
+  cd okaru-play
+  git describe --long --tags --abbrev=9 --match 'v*' | sed 's/^v//; s/-\([0-9]*\)-g/.r\1.g/'
+}
+
+build() {
+  arch-meson okaru-play build -Dtests=disabled
+  meson compile -C build
+}
+
+package() {
+  meson install -C build --destdir "$pkgdir"
+  install -Dm644 okaru-play/LICENSE -t "$pkgdir/usr/share/licenses/$pkgname"
+}
