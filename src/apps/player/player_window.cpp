@@ -435,7 +435,6 @@ namespace okaru::player {
     if (!m_files.empty()) {
       canvas->addChild(
           ui::inputArea({
-              .acceptedButtons = BTN_LEFT,
               .width = m_canvasWidth,
               .height = m_canvasHeight,
               .zIndex = 1,
